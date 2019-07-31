@@ -1,0 +1,96 @@
+cc_library(
+	name = 'tfc',
+	prebuilt = 1
+)
+
+cc_library(
+	name = 'dqa_gsc_proto',
+	prebuilt = 1
+)
+
+cc_library(
+	name = 'dqa_weather_proto',
+	prebuilt = 1
+)
+cc_library(
+	name = 'dqa_rootmerge_proto',
+	prebuilt = 1
+)
+
+#cc_library(
+#	name = 'pattern_compnent',
+#)
+
+cc_plugin(
+	name = 'gsc_qa',
+	srcs = [
+		'comm_db.cc',
+		'question_analyzer.cc',
+		'qa_mcd_proc.cc',
+		'common_stat.cc',
+		'qa_stat.cc',
+	],
+	deps = [
+        ':tfc',
+		':dqa_gsc_proto',
+		':dqa_weather_proto',
+		':dqa_rootmerge_proto',
+		'//longconn:longconn',
+		'//spider/code/spider/spider_patternmatch:pattern_compnent',
+        '//common/text/regex:regex',
+        '//common/base/string:string',
+        '//common/encoding:encoding',
+		'//thirdparty/mysql:mysqlclient',
+		'//common/system/concurrency:concurrency',
+        '//common/system/time:time',
+        '//common/file:file',
+        '//common/file:local_file',
+		'//common/file:file_change_notifier',
+	],
+	incs = [	
+		'./',
+		'./inc/',
+		'./proto/',
+		'../spider_patternmatch/',
+        '../../../../common/text/regex',
+		'../../../../common/base/string',
+		'../../../../thirdparty/mysql',
+		'../../../../spider/code/public/mcp++/inc/',
+	],
+	defs = [
+		'SNACC_DEEP_COPY',
+	],
+    warning='no'
+)
+
+cc_plugin(
+	name = 'net_complete',
+	srcs = [
+		'longconn_complete.cpp'
+	],
+	incs = [
+		'./',
+		'../../../../common/base_protocol',
+	],
+    defs = [
+        'SNACC_DEEP_COPY',
+    ]
+)
+#cc_binary(
+#	name = 'qa_main',
+#	srcs = [
+#		'qa_main.cc',
+#	],
+#	deps = [
+#		':qa',
+#		'#pthread',
+#	],
+#	incs = [
+#		'./',
+#	],
+#	defs = [
+#		'SNACC_DEEP_COPY',
+#	],
+#
+#	warning = 'no'
+#)
